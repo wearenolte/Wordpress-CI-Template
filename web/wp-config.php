@@ -167,13 +167,18 @@ if ( isset( $_ENV['PANTHEON_ENVIRONMENT'] ) ):
 		define( 'DISALLOW_FILE_MODS', true );
 	endif;
 
+	if ( ! in_array( $_ENV['PANTHEON_ENVIRONMENT'], array( 'dev', 'test', 'live' ), true ) ) {
+		define( 'WP_DEBUG', true );
+	}
 endif;
 
 /*
 * Define wp-content directory outside of WordPress core directory
 */
 define( 'WP_CONTENT_DIR', dirname( __FILE__ ) . '/wp-content' );
-define( 'WP_CONTENT_URL', WP_HOME . '/wp-content' );
+if ( defined( 'WP_HOME' ) ):
+	define( 'WP_CONTENT_URL', WP_HOME . '/wp-content' );
+endif;
 
 /**
  * WordPress Database Table prefix.

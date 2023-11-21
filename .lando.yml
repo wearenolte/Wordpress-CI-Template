@@ -3,23 +3,23 @@ recipe: pantheon
 services:
   appserver:
     build_as_root:
-      - curl -fsSL https://deb.nodesource.com/setup_18.x | bash -
-      - curl -sL https://dl.yarnpkg.com/debian/pubkey.gpg | gpg --dearmor | tee /usr/share/keyrings/yarnkey.gpg >/dev/null
-      - echo "deb [signed-by=/usr/share/keyrings/yarnkey.gpg] https://dl.yarnpkg.com/debian stable main" | tee /etc/apt/sources.list.d/yarn.list
-      - apt update -y
-      - apt-get install -y nodejs yarn
-      - npm install -g npm@latest
-    build:
-      - cd /app && composer install -n
-    run_as_root:
+      - apt-get update
+      - apt-get install -y ca-certificates curl gnupg
+      - mkdir -p /etc/apt/keyrings
+      - curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg
+      - echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_20.x nodistro main" | tee /etc/apt/sources.list.d/nodesource.list
+      - apt-get update
+      - apt-get install nodejs -y
+      - npm install -g npm@10.2.4
+      - npm install --global yarn
   node:
     type: node
 tooling:
-  node:
-    service: appserver
-  npm:
-    service: appserver
   yarn:
-    service: appserver
+    service: node
+  npm:
+    service: node
 config:
   cache: false
+  framework: wordpress
+  edge: false

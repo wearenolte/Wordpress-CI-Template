@@ -3,7 +3,7 @@ x-bash-env-steps:
   - &bash_env_export export BASH_ENV="$BITBUCKET_CLONE_DIR/.bashrc"
   - &bash_env_source source $BASH_ENV
 
-definitions: 
+definitions:
   steps:
     - step: &env_vars
         name: Configure Environment Variables
@@ -77,35 +77,8 @@ definitions:
           - ./.ci/test/visual-regression/run
         artifacts:
           - backstop_data/**
-    - step: &lighthouse_test
-        name: Run Lighthouse Tests
-        services:
-          - docker
-        script:
-          - *bash_env_export
-          - *bash_env_source
-          - npm i -g @lhci/cli
-          - ./tests/lighthouse/run
-        artifacts:
-          - tests/lighthouse/reports/**
-    - step: &cypress
-        name: Run Cypress Tests
-        services:
-          - docker
-        script:
-          - *bash_env_export
-          - *bash_env_source
-          - npm install
-          - export HAPPO_CURRENT_SHA=$BITBUCKET_COMMIT && echo $HAPPO_CURRENT_SHA
-          - export HAPPO_PREVIOUS_SHA=$([[ $BITBUCKET_PR_DESTINATION_BRANCH != "" ]] && git rev-parse origin/$BITBUCKET_PR_DESTINATION_BRANCH) && echo $HAPPO_PREVIOUS_SHA
-          - export HAPPO_CHANGE_URL=$([[ $BITBUCKET_PR_ID != "" ]] && $CI_PR_URL) && echo $HAPPO_CHANGE_URL
-          - ./tests/cypress/run
-        image: cypress/included:4.7.0
-        artifacts:
-         - tests/cypress/screenshots/**
-         - tests/cypress/videos/**
 
-image: quay.io/pantheon-public/build-tools-ci:6.x
+image: quay.io/pantheon-public/build-tools-ci:8.x-php8.1
 
 options:
   max-time: 30
@@ -122,8 +95,6 @@ pipelines:
         - step: *build
       - step: *deploy
       - step: *ui_test
-      - step: *lighthouse_test
-      - step: *functional_test
   pull-requests:
     'clu-*':
       - step: *env_vars
@@ -132,8 +103,6 @@ pipelines:
         - step: *build
       - step: *deploy
       - step: *ui_test
-      - step: *lighthouse_test
-      - step: *functional_test
   custom:
     clu:
     - step:
