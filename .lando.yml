@@ -10,7 +10,7 @@ services:
       - echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_20.x nodistro main" | tee /etc/apt/sources.list.d/nodesource.list
       - apt-get update
       - apt-get install nodejs -y
-      - npm install -g npm@10.2.4
+      - npm install -g npm@10.8.1
       - npm install --global yarn
   node:
     type: node

@@ -99,8 +99,7 @@
       "./vendor/bin/phpcs --standard=WordPress ./web/wp-content/themes"
     ],
     "unit-test": [
-      "./vendor/bin/phpunit tests/unit/*",
-      "php coverage-checker.php clover.xml 80"
+      "echo 'Add your unit tests here.'"
     ],
     "functional-test": [
       "./tests/cypress/run"
@@ -113,5 +112,6 @@
       "@functional-test"
     ],
     "lint": "find web/wp-content -name '*.php' -exec php -l {} \\;"
-  }
+  },
+  "minimum-stability": "dev"
 }

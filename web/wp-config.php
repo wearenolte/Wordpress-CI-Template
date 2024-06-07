@@ -50,13 +50,13 @@ if ( ! isset( $_ENV['PANTHEON_ENVIRONMENT'] ) ):
 	/**
 	 * Define site and home URLs
 	 */
-	// HTTP is still the default scheme for now.
-	$scheme = 'http';
-	// If we have detected that the end use is HTTPS, make sure we pass that
+	// HTTPS is the default scheme.
+	$scheme = 'https';
+	// If we have detected that the end use is not HTTPS, make sure we pass that
 	// through here, so <img> tags and the like don't generate mixed-mode
 	// content warnings.
-	if ( isset( $_SERVER['HTTP_USER_AGENT_HTTPS'] ) && $_SERVER['HTTP_USER_AGENT_HTTPS'] == 'ON' ) {
-		$scheme = 'https';
+	if ( ! isset( $_SERVER['HTTP_USER_AGENT_HTTPS'] ) && ! $_SERVER['HTTP_USER_AGENT_HTTPS'] == 'ON' ) {
+		$scheme = 'http';
 	}
 	$site_url = getenv( 'WP_HOME' ) !== false ? getenv( 'WP_HOME' ) : $scheme . '://' . $_SERVER['HTTP_HOST'] . '/';
 	define( 'WP_HOME', $site_url );
@@ -144,13 +144,13 @@ if ( isset( $_ENV['PANTHEON_ENVIRONMENT'] ) ):
 
 	/** A couple extra tweaks to help things run well on Pantheon. **/
 	if ( isset( $_SERVER['HTTP_HOST'] ) ) {
-		// HTTP is still the default scheme for now.
-		$scheme = 'http';
-		// If we have detected that the end use is HTTPS, make sure we pass that
+		// HTTPS is still the default scheme for now.
+		$scheme = 'https';
+		// If we have detected that the end use is not HTTPS, make sure we pass that
 		// through here, so <img> tags and the like don't generate mixed-mode
 		// content warnings.
-		if ( isset( $_SERVER['HTTP_USER_AGENT_HTTPS'] ) && $_SERVER['HTTP_USER_AGENT_HTTPS'] == 'ON' ) {
-			$scheme = 'https';
+		if ( ! isset( $_SERVER['HTTP_USER_AGENT_HTTPS'] ) && ! $_SERVER['HTTP_USER_AGENT_HTTPS'] == 'ON' ) {
+			$scheme = 'http';
 		}
 		define( 'WP_HOME', $scheme . '://' . $_SERVER['HTTP_HOST'] );
 		define( 'WP_SITEURL', $scheme . '://' . $_SERVER['HTTP_HOST'] . '/wp' );
